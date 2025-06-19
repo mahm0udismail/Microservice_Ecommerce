@@ -25,3 +25,12 @@ replay_pid*
 .env
 application.properties
 .vscode
+
+# IntelliJ IDEA specific files
+.idea/
+**/.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+out/
