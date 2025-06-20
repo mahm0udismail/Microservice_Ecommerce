@@ -18,7 +18,13 @@ services:
       - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}   
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
 
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin-container
+    ports:
+      - "9411:9411"
+      
 volumes:
   mongo-data:
