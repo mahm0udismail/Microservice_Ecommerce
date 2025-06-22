@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
 import com.micro.productservice.category.Category;
+import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
