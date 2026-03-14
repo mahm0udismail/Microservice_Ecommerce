@@ -5,13 +5,11 @@ import com.ecommerce.product.dto.ProductResponse;
 import com.ecommerce.product.dto.PurchaseRequest;
 import com.ecommerce.product.dto.PurchaseResponse;
 import com.ecommerce.product.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +27,7 @@ public class ProductService {
 
     @Transactional
     public List<PurchaseResponse> purchaseProducts(List<PurchaseRequest> requests) {
+
         var productIds = requests.stream()
                 .map(PurchaseRequest::productId)
                 .toList();
@@ -39,15 +38,17 @@ public class ProductService {
             throw new ProductPurchaseException("One or more products do not exist");
         }
 
-        var sortedRequests = requests.stream()
-                .sorted(Comparator.comparing(PurchaseRequest::productId))
-                .toList();
+        var requestMap = requests.stream()
+                .collect(Collectors.toMap(
+                        PurchaseRequest::productId,
+                        r -> r
+                ));
 
         var purchasedProducts = new ArrayList<PurchaseResponse>();
 
-        for (int i = 0; i < storedProducts.size(); i++) {
-            var product = storedProducts.get(i);
-            var request = sortedRequests.get(i);
+        for (var product : storedProducts) {
+
+            var request = requestMap.get(product.getId());
 
             if (product.getAvailableQuantity() < request.quantity()) {
                 throw new ProductPurchaseException(
@@ -84,6 +85,6 @@ public class ProductService {
         return repository.findAll()
                 .stream()
                 .map(mapper::toProductResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
