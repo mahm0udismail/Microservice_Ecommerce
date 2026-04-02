@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +40,7 @@ public class OrderService {
         List<PurchaseResponse> purchasedProducts = productClient.purchaseProducts(
                 request.products().stream()
                         .map(p -> new PurchaseRequest(p.productId(), p.quantity()))
-                        .collect(Collectors.toList())
+                        .toList()
         );
 
         // 3. Save the order
@@ -78,7 +77,7 @@ public class OrderService {
         return orderRepository.findAll()
                 .stream()
                 .map(mapper::toOrderResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public OrderResponse findById(Integer orderId) {
